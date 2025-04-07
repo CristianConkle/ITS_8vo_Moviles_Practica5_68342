@@ -1,5 +1,7 @@
 // app/services/api.ts
-const API_BASE_URL = 'https://camps-southeast-mysterious-similarly.trycloudflare.com/api';
+import { auth } from './auth';
+
+const API_BASE_URL = 'https://dubai-td-ie-win.trycloudflare.com/api';
 
 interface Tarea {
   id: number;
@@ -8,72 +10,49 @@ interface Tarea {
   completada: boolean;
 }
 
+const getAuthHeaders = async () => {
+  const token = await auth.getToken();
+  return {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+};
+
 export const api = {
   getTareas: async (): Promise<Tarea[]> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tareas`);
-      if (!response.ok) throw new Error('Error fetching tareas');
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching tareas:', error);
-      throw error;
-    }
-  },
-
-  getTarea: async (id: number): Promise<Tarea> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tareas/${id}`);
-      if (!response.ok) throw new Error(`Error fetching tarea ${id}`);
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching tarea ${id}:`, error);
-      throw error;
-    }
+    const response = await fetch(`${API_BASE_URL}/tareas`, {
+      headers: await getAuthHeaders()
+    });
+    if (!response.ok) throw new Error('Error fetching tareas');
+    return await response.json();
   },
 
   createTarea: async (tarea: Omit<Tarea, 'id'>): Promise<Tarea> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tareas`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tarea)
-      });
-      if (!response.ok) throw new Error('Error creating tarea');
-      return await response.json();
-    } catch (error) {
-      console.error('Error creating tarea:', error);
-      throw error;
-    }
+    const response = await fetch(`${API_BASE_URL}/tareas`, {
+      method: 'POST',
+      headers: await getAuthHeaders(),
+      body: JSON.stringify(tarea)
+    });
+    if (!response.ok) throw new Error('Error creating tarea');
+    return await response.json();
   },
 
   updateTarea: async (id: number, tarea: Partial<Tarea>): Promise<Tarea> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tareas/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tarea)
-      });
-      if (!response.ok) throw new Error(`Error updating tarea ${id}`);
-      return await response.json();
-    } catch (error) {
-      console.error(`Error updating tarea ${id}:`, error);
-      throw error;
-    }
+    const response = await fetch(`${API_BASE_URL}/tareas/${id}`, {
+      method: 'PUT',
+      headers: await getAuthHeaders(),
+      body: JSON.stringify(tarea)
+    });
+    if (!response.ok) throw new Error(`Error updating tarea ${id}`);
+    return await response.json();
   },
 
   deleteTarea: async (id: number): Promise<void> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tareas/${id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) throw new Error(`Error deleting tarea ${id}`);
-    } catch (error) {
-      console.error(`Error deleting tarea ${id}:`, error);
-      throw error;
-    }
+    const response = await fetch(`${API_BASE_URL}/tareas/${id}`, {
+      method: 'DELETE',
+      headers: await getAuthHeaders()
+    });
+    if (!response.ok) throw new Error(`Error deleting tarea ${id}`);
   }
 };

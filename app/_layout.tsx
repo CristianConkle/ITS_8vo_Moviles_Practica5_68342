@@ -1,49 +1,27 @@
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-import CreateNoteScreen from './create-note';
-import ListNotesScreen from '.';
 import { Stack } from 'expo-router';
+import { useEffect } from 'react';
+import { AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const App = () => {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function RootLayout() {
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    const subscription = AppState.addEventListener('change', async (state) => {
+      if (state === 'inactive' || state === 'background') {
+        await AsyncStorage.removeItem('authToken');
+        console.log('🔐 Token eliminado automáticamente al cerrar la app');
+      }
+    });
 
-  if (!loaded) {
-    return null;
-  }
+    return () => subscription.remove();
+  }, []);
 
   return (
     <Stack>
-      <Stack.Screen
-        name="index"
-        options={
-          {
-            title: 'Mis Notas',
-          }
-        }
-      />
-      <Stack.Screen
-        name='create-note'
-        options={
-          {
-            title: 'Crear nueva nota'
-          }
-        }
-      />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ title: 'Mis Notas' }} />
+      <Stack.Screen name="create-note" options={{ title: 'Crear nueva nota' }} />
     </Stack>
   );
-};
-export default App;
+}
