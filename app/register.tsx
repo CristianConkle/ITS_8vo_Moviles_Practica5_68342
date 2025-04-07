@@ -62,23 +62,59 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, justifyContent: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  input: {
-    borderWidth: 1,
-    borderColor: '#999',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-    backgroundColor: '#fff'
-  },
-  button: {
-    backgroundColor: '#03a9f4',
-    padding: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10
-  },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
-  linkText: { marginTop: 20, color: '#03a9f4', textAlign: 'center' }
-});
+    container: {
+      flex: 1,
+      padding: 24,
+      justifyContent: 'center',
+      backgroundColor: '#111', // fondo tipo consola
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '900',
+      marginBottom: 24,
+      textAlign: 'center',
+      color: '#33ff57',
+      letterSpacing: 2,
+      textTransform: 'uppercase',
+      textShadowColor: '#000',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 2,
+    },
+    input: {
+      backgroundColor: '#222',
+      borderRadius: 2,
+      padding: 12,
+      marginBottom: 16,
+      fontSize: 14,
+      color: '#aaa',
+      borderWidth: 2,
+      borderColor: '#33ff57',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    button: {
+      backgroundColor: '#33ff57',
+      padding: 14,
+      borderRadius: 2,
+      alignItems: 'center',
+      marginTop: 10,
+      borderWidth: 2,
+      borderColor: '#0f0',
+    },
+    buttonText: {
+      color: '#111',
+      fontWeight: 'bold',
+      fontSize: 16,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+    },
+    linkText: {
+      marginTop: 24,
+      textAlign: 'center',
+      color: '#aaa',
+      fontSize: 12,
+      fontWeight: '600',
+      textDecorationLine: 'underline',
+    }
+  });
+  
